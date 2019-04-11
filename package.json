@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DallasEpperson/dallasepperson-web/issues"
   },
-  "homepage": "https://github.com/DallasEpperson/dallasepperson-web#readme"
+  "homepage": "https://github.com/DallasEpperson/dallasepperson-web#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
