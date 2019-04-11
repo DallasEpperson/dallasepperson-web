@@ -1,0 +1,19 @@
+{
+  "name": "dallasepperson-web",
+  "version": "1.0.0",
+  "description": "Personal website for Dallas Epperson",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DallasEpperson/dallasepperson-web.git"
+  },
+  "author": "Dallas Epperson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DallasEpperson/dallasepperson-web/issues"
+  },
+  "homepage": "https://github.com/DallasEpperson/dallasepperson-web#readme"
+}
