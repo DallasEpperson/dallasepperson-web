@@ -3,12 +3,12 @@
   <head>
     <title>Completed Hikes</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-        crossorigin=""/>
-      <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+      crossorigin="anonymous"></script>
     <style>
       #mapid {
         height: 580px;
@@ -29,18 +29,21 @@
         accessToken: '<%= mapboxToken %>'
       }).addTo(mymap);
       
-      var shutin = <%-JSON.stringify(shutin)%>;
-      
-      var shutinLayer = L.geoJSON(shutin, {
-        color: 'hsl(' + Math.random()*360 + ',100%,50%)'
-      });
-      shutinLayer.bindPopup("<b>Shut-In Trail</b><br/>2019.04.08");
-      var hikeRoutes = L.layerGroup([shutinLayer]);
+      var hikeRoutes = L.layerGroup();
       var overlays = {
         "Completed Hikes": hikeRoutes
       };
       L.control.layers(null, overlays).addTo(mymap);
-      hikeRoutes.addTo(mymap); // make this one on by default
+      hikeRoutes.addTo(mymap); <%# make this one on by default %>
+
+      $.getJSON('hikes/api/items', function(data){
+        for (let i = 0; i < data.length; i++) {
+          const element = data[i];
+          var derpLayer = L.geoJSON(element, {color: 'hsl(' + Math.random()*360 + ',100%,50%)'});
+          derpLayer.bindPopup('<b>' + element.hikeName + '</b><br/>' + element.hikeDate);
+          hikeRoutes.addLayer(derpLayer);
+        }
+      });
     </script>
   </body>
 </html>
