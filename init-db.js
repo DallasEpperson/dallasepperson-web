@@ -37,32 +37,26 @@ db.serialize(function(){
     
     var hikeId;
     db.get('SELECT last_insert_rowid() AS id', (err, row) => {
-        console.log('last_insert_rowid() executed.');
-        console.log(row);
         hikeId = row.id;
+
+        db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
+        {
+            $hikeId: hikeId,
+            $latitude: 35.5010535,
+            $longitude: -82.5940637,
+            $ordinal: 0
+        });
+        db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
+        {
+            $hikeId: hikeId,
+            $latitude: 35.4424611,
+            $longitude: -82.7198156,
+            $ordinal: 1
+        });
+
+        console.log('dummy data inserted');
+
+        console.log('Done with init-db');
+        db.close();
+        });
     });
-    
-    console.log('hikeId is ', hikeId); // undefined because this executes before db.get's callback.
-
-    db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
-    {
-        $hikeId: hikeId,
-        $latitude: 35.5010535,
-        $longitude: -82.5940637,
-        $ordinal: 0
-    });
-    db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
-    {
-        $hikeId: hikeId,
-        $latitude: 35.4424611,
-        $longitude: -82.7198156,
-        $ordinal: 1
-    });
-
-    console.log('dummy data inserted');
-});
-
-db.close();
-
-console.log('Done with init-db');
-
