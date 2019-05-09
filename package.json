@@ -4,7 +4,8 @@
   "description": "Personal website for Dallas Epperson",
   "scripts": {
     "start": "node ./bin/www",
-    "initDb": "node ./init-db.js"
+    "initDb": "node ./init-db.js",
+    "dbTest": "node ./db-test.js"
   },
   "repository": {
     "type": "git",
