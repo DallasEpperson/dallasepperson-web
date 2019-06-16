@@ -39,7 +39,10 @@
       $.getJSON('hikes/api/items', function(data){
         for (let i = 0; i < data.length; i++) {
           const element = data[i];
-          var derpLayer = L.geoJSON(element, {color: 'hsl(' + Math.random()*360 + ',100%,50%)'});
+          var hue = Math.random()*360;
+          var sat = Math.random()*25 + 75;
+          var lum = Math.random()*50 + 25;
+          var derpLayer = L.geoJSON(element, {color: 'hsl(' + hue + ',' + sat + '%,' + lum + '%)'});
           derpLayer.bindPopup('<b>' + element.hikeName + '</b><br/>' + element.hikeDate);
           hikeRoutes.addLayer(derpLayer);
         }
