@@ -3,12 +3,9 @@
   <head>
     <title>Completed Hikes</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-      crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-      crossorigin=""></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
-      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
     <style>
       #mapid {
         height: 680px;
@@ -20,6 +17,7 @@
     <div id="mapid"></div>
 
     <script>
+      var preferredUnit = 'mi';
       var mymap = L.map('mapid').setView([35.61, -82.4757], 10);
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -34,16 +32,45 @@
         "Completed Hikes": hikeRoutes
       };
       L.control.layers(null, overlays).addTo(mymap);
-      hikeRoutes.addTo(mymap); <%# make this one on by default %>
+      hikeRoutes.addTo(mymap);
+
+      var convertToPreferredUnit = function(meters){
+        switch (preferredUnit) {
+          case 'KM':
+            return (meters/1000).toFixed(2) + 'KM';
+          case 'mi':
+            return (meters*0.00062137).toFixed(2) + 'mi';
+          default:
+            return meters + 'M';
+        }
+      };
+
+      var degToRad = function(deg){
+        return deg * (Math.PI/180);
+      };
+
+      var getDistance = function(coordinates){
+        var distInMeters = 0;
+        for (var i = 1; i < coordinates.length; i++){
+          var lat1 = coordinates[i-1][1];
+          var lon1 = coordinates[i-1][0];
+          var lat2 = coordinates[i][1];
+          var lon2 = coordinates[i][0];
+          var φ1 = degToRad(lat1), φ2 = degToRad(lat2), Δλ = degToRad(lon2-lon1), R = 6371e3; // gives d in metres
+          var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
+          distInMeters += d;
+        }
+        return distInMeters;
+      };
 
       $.getJSON('hikes/api/items', function(data){
-        for (let i = 0; i < data.length; i++) {
-          const element = data[i];
+        for (const hike of data){
           var hue = Math.random()*360;
           var sat = Math.random()*25 + 75;
           var lum = Math.random()*50 + 25;
-          var derpLayer = L.geoJSON(element, {color: 'hsl(' + hue + ',' + sat + '%,' + lum + '%)'});
-          derpLayer.bindPopup('<b>' + element.hikeName + '</b><br/>' + element.hikeDate);
+          hike.distance = getDistance(hike.features[0].geometry.coordinates);
+          var derpLayer = L.geoJSON(hike, {color: 'hsl(' + hue + ',' + sat + '%,' + lum + '%)'});
+          derpLayer.bindPopup(`<b>${hike.hikeName}</b><br/>${hike.hikeDate}<br/>${convertToPreferredUnit(hike.distance)}`);
           hikeRoutes.addLayer(derpLayer);
         }
       });
