@@ -1,20 +1,20 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./data/hikes.db');
+var json = require('./data/hikes.json');
 
 
 console.log('Made it to init-db.');
 
-db.serialize(function(){
+db.serialize(() => {
     db.run(`
-        CREATE TABLE "hike" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-            "startEpoch"	INTEGER,
-            "endEpoch"	INTEGER,
-            "name"	TEXT,
-            "color"	TEXT
-        );`);
-
-    db.run(`
+    CREATE TABLE "hike" (
+        "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        "startEpoch"	INTEGER,
+        "endEpoch"	INTEGER,
+        "name"	TEXT,
+        "color"	TEXT
+    );
+    `).run(`
         CREATE TABLE "coordinate" (
             "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
             "hikeId"	INTEGER NOT NULL,
@@ -22,41 +22,26 @@ db.serialize(function(){
             "longitude"	NUMERIC NOT NULL,
             "ordinal"	INTEGER NOT NULL,
             FOREIGN KEY (hikeId) REFERENCES hike(id)
-        )`);
-        
-    
-    console.log('DB Structure Created.');
+        );
+    `);
 
-    db.run('insert into hike (startEpoch, endEpoch, name, color) values ($startEpoch, $endEpoch, $name, $color)',
-        {
-            $startEpoch: 12,
-            $endEpoch: 34,
-            $name: 'Bogus Hike',
-            $color: 'hsl(50,50,50)'
+    for (const hike of json){
+        db.run('INSERT INTO hike(startEpoch,endEpoch,name,color) VALUES (?,?,?,?)', 123, 234, hike.hikeName, 'hsl(1,2,3)', function(hikeErr){
+            if(hikeErr){
+                console.error(hikeErr);
+                return;
+            }
+            let insertedId = this.lastID;
+            for(var i = 0; i < hike.features[0].geometry.coordinates.length; i++){
+                let coord = hike.features[0].geometry.coordinates[i];
+                db.run('INSERT INTO coordinate (hikeId,latitude,longitude,ordinal) VALUES (?,?,?,?)',insertedId,coord[1],coord[0],i, function(coordErr){
+                    if(coordErr){
+                        console.error(coordErr);
+                        return;
+                    }
+                    let insertedCoordId = this.lastID;
+                });
+            }
         });
-    
-    var hikeId;
-    db.get('SELECT last_insert_rowid() AS id', (err, row) => {
-        hikeId = row.id;
-
-        db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
-        {
-            $hikeId: hikeId,
-            $latitude: 35.5010535,
-            $longitude: -82.5940637,
-            $ordinal: 0
-        });
-        db.run('insert into coordinate (hikeId, latitude, longitude, ordinal) values ($hikeId, $latitude, $longitude, $ordinal)', 
-        {
-            $hikeId: hikeId,
-            $latitude: 35.4424611,
-            $longitude: -82.7198156,
-            $ordinal: 1
-        });
-
-        console.log('dummy data inserted');
-
-        console.log('Done with init-db');
-        db.close();
-        });
-    });
+    }
+});

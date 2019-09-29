@@ -1,29 +1,16 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./data/hikes.db');
 
-var hikes = [];
-db.each('select * from hike', function(err, hikeRow){
-    var hike = {
-        "hikeName": hikeRow.name,
-        "hikeDate": "TODO DATE",
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": []
-                }
-            }
-        ]
-    };
-    db.each('select * from coordinate where hikeId = $hikeId', {$hikeId: hikeRow.id}, function(err, coordRow){
-        hike.features[0].geometry.coordinates.push([coordRow.longitude, coordRow.latitude]);
-    }, function(coordErr, coordCount){
-        hikes.push(hike);
+db.all('select * from hike', function(err, hikeRows){
+    hikeRows.forEach((a) => a.coords=[]);
+    var hikeIds = hikeRows.map((a) => a.id).join(',');
+    db.all(`select * from coordinate where hikeId in (${hikeIds}) order by hikeId, ordinal`, function(err, coordRows){
+        coordRows.forEach(function(c){
+            let relevantHike = hikeRows.find((a) => a.id === c.hikeId);
+            relevantHike.coords.push(c);
+        });
+        console.log(`found ${coordRows.length} coord records`);
+        console.log('--hikeRows--');
+        console.log(hikeRows);
     });
-}, function(err, count){
-    console.log('hike completed callback', err, count);
-    console.log('hikes array');
-    console.log(hikes);
 });
