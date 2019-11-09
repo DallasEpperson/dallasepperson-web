@@ -17464,6 +17464,7 @@
   {
     "hikeName": "Mt Pisgah to Stony Bald",
     "hikeDate": "2018.11.10",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -19082,6 +19083,7 @@
   {
     "hikeName": "Grassy Knob Tunnel to Hard Times",
     "hikeDate": "2018.11.22",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -19568,6 +19570,7 @@
   {
     "hikeName": "Bent Creek to Grassy Knob Tunnel",
     "hikeDate": "2018.12.02",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -20904,6 +20907,7 @@
   {
     "hikeName": "191 to Fish Pond Rd",
     "hikeDate": "2019.03.09",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -21758,6 +21762,7 @@
   {
     "hikeName": "Stony Bald to Bent Creek",
     "hikeDate": "2019.03.24",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -26302,6 +26307,7 @@
   {
     "hikeName": "Fish Pond Rd to BRP Visitors Center",
     "hikeDate": "2019.04.30",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -27712,6 +27718,7 @@
   {
     "hikeName": "BRP Visitors Center to Folk Art Center",
     "hikeDate": "2019.05.15",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -28382,6 +28389,7 @@
   {
     "hikeName": "Folk Art Center to BRP m379",
     "hikeDate": "2019.05.22",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -29504,6 +29512,7 @@
   {
     "hikeName": "BRP m379 to Tanbark Ridge",
     "hikeDate": "2019.05.31",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -29950,6 +29959,7 @@
   {
     "hikeName": "Tanbark Ridge to Ox Creek",
     "hikeDate": "2019.06.12",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -30436,6 +30446,7 @@
   {
     "hikeName": "Ox Creek to Rich Knob",
     "hikeDate": "2019.06.26",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -31262,6 +31273,7 @@
   {
     "hikeName": "Rich Knob to BRP m368",
     "hikeDate": "2019.07.07",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -33170,6 +33182,7 @@
   {
     "hikeName": "Douglas Falls Trailhead to Walker Knob Overlook",
     "hikeDate": "2019.07.14",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -34536,6 +34549,7 @@
   {
     "hikeName": "Walker Knob Overlook to NC 128",
     "hikeDate": "2019.07.20",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
@@ -36194,6 +36208,7 @@
   {
     "hikeName": "NC 128 to Mt Mitchell Summit",
     "hikeDate": "2019.07.28",
+    "outAndBack": true,
     "type": "FeatureCollection",
     "generator": "overpass-ide",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
