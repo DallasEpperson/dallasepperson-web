@@ -69,8 +69,9 @@
           var sat = Math.random()*25 + 75;
           var lum = Math.random()*50 + 25;
           hike.distance = getDistance(hike.features[0].geometry.coordinates);
+          if(hike.outAndBack) hike.distance*=2;
           var derpLayer = L.geoJSON(hike, {color: 'hsl(' + hue + ',' + sat + '%,' + lum + '%)'});
-          derpLayer.bindPopup(`<b>${hike.hikeName}</b><br/>${hike.hikeDate}<br/>${convertToPreferredUnit(hike.distance)}`);
+          derpLayer.bindPopup(`<b>${hike.hikeName}</b><br/>${hike.hikeDate}<br/>${convertToPreferredUnit(hike.distance)}${hike.outAndBack?' (Out and Back)':''}`);
           hikeRoutes.addLayer(derpLayer);
         }
       });
