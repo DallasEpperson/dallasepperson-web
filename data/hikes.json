@@ -1,6 +1,7 @@
 [
   {
     "hikeName": "Hard Times to 191",
+    "todo": "Fix me. We went from 191 through arboretum through Hard Times to Wesley Branch back Hard Times then MST",
     "hikeDate": "2018.08.14",
     "type": "FeatureCollection",
     "generator": "overpass-ide",
@@ -31787,6 +31788,7 @@
   },
   {
     "hikeName": "BRP m368 to Douglas Falls Trailhead",
+    "todo": "Fix me, m368 to craggy spur to visitors spur to DF trailhead, back no spurs",
     "hikeDate": "2019.07.08",
     "type": "FeatureCollection",
     "generator": "overpass-ide",
