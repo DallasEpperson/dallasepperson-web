@@ -40,8 +40,12 @@ router.get('/api/items', function (req, res) {
 
     //TODO learn to read from DB instead
     fs.readFile('./data/hikes.json', function (err, json) {
+      try{
         let obj = JSON.parse(json);
         res.json(obj);
+      }catch(err){
+        res.json(false);
+      }
     });
 });
   
