@@ -6,3 +6,29 @@ body {
 a {
   color: #00B7FF;
 }
+
+#mapid .leaflet-overlay-pane path {
+  stroke-width: 5;
+  stroke-opacity: 0.8;
+}
+
+#mapid .leaflet-overlay-pane path:hover {
+  stroke-width: 7;
+  stroke-opacity: 1;
+}
+
+#mapid .leaflet-overlay-pane path:focus {
+  /*TODO: set class on path when its popup pane is triggered*/
+  stroke-dasharray: 10,20;
+  animation: linear infinite ant-path-anim;
+  animation-duration: 20s;
+}
+
+@keyframes ant-path-anim {
+  0% {
+    stroke-dashoffset: 100%;
+  }
+  100% {
+    stroke-dashoffset: 0%;
+  }
+}
