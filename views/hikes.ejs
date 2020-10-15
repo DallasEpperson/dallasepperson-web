@@ -3,12 +3,16 @@
   <head>
     <title>Completed Hikes</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
     <style>
       #mapid {
-        height: 680px;
+        height: 800px;
       }
     </style>
   </head>
@@ -20,16 +24,18 @@
       var preferredUnit = 'mi';
       var mymap = L.map('mapid').setView([35.61, -82.4757], 10);
 
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
-        id: 'mapbox.streets',
+        id: 'mapbox/outdoors-v11',
+        tileSize: 512,
+        zoomOffset: -1,
         accessToken: '<%= mapboxToken %>'
       }).addTo(mymap);
       
       var hikeRoutes = L.layerGroup();
       var overlays = {
-        "Completed Hikes": hikeRoutes
+        "Backpacking": hikeRoutes
       };
       L.control.layers(null, overlays).addTo(mymap);
       L.control.scale().addTo(mymap);
@@ -59,19 +65,33 @@
           var lon2 = coordinates[i][0];
           var φ1 = degToRad(lat1), φ2 = degToRad(lat2), Δλ = degToRad(lon2-lon1), R = 6371e3; // gives d in metres
           var d = Math.acos( Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2) * Math.cos(Δλ) ) * R;
-          distInMeters += d;
+          distInMeters += !d? 0 : d;
         }
         return distInMeters;
       };
 
+      var randomInteger = function(min,max){
+        return Math.floor(Math.random() * (max-min+1))+min;
+      };
+
+      var randomColor = function(){
+        var hue = randomInteger(210,390)%360;
+        var sat = randomInteger(45,95);
+        var lum = randomInteger(40,60);
+        return 'hsl(' + hue + ',' + sat + '%,' + lum + '%)';
+      };
+
+      window.totalDistance = 0;
+
       $.getJSON('hikes/api/items', function(data){
         for (const hike of data){
-          var hue = Math.random()*360;
+          var hue = Math.random()*360;// hue=240;
           var sat = Math.random()*25 + 75;
-          var lum = Math.random()*50 + 25;
+          var lum = Math.random()*50 + 25; lum=50;
           hike.distance = getDistance(hike.features[0].geometry.coordinates);
           if(hike.outAndBack) hike.distance*=2;
-          var derpLayer = L.geoJSON(hike, {color: 'hsl(' + hue + ',' + sat + '%,' + lum + '%)'});
+          window.totalDistance+=hike.distance;
+          var derpLayer = L.geoJSON(hike, {color: randomColor()});
           derpLayer.bindPopup(`<b>${hike.hikeName}</b><br/>${hike.hikeDate}<br/>${convertToPreferredUnit(hike.distance)}${hike.outAndBack?' (Out and Back)':''}`);
           hikeRoutes.addLayer(derpLayer);
         }
