@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Completed Hikes</title>
+    <link rel='stylesheet' href='style.css' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+    <style>
+      #mapid {
+        height: 800px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Completed Hikes</h1>
+    <div id="mapid"></div>
+
+    <script>
+      var preferredUnit = 'mi';
+      var mymap = L.map('mapid').setView([35.61, -82.4757], 10);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/outdoors-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiZGFsbGFzZXBwZXJzb24iLCJhIjoiY2p1YnlobnVwMDE4cDQzbXFyajZsbDV2biJ9.NFl_bu3i-2CpSVoevhmzsw'
+      }).addTo(mymap);
+      
+      var hikeRoutes = L.layerGroup();
+      var overlays = {
+        "Backpacking": hikeRoutes
+      };
+      L.control.layers(null, overlays).addTo(mymap);
+      L.control.scale().addTo(mymap);
+      hikeRoutes.addTo(mymap);
+
+      var convertToPreferredUnit = function(meters){
+        switch (preferredUnit) {
+          case 'KM':
+            return (meters/1000).toFixed(2) + 'KM';
+          case 'mi':
+            return (meters*0.00062137).toFixed(2) + 'mi';
+          default:
+            return meters + 'M';
+        }
+      };
+
+      var degToRad = function(deg){
+        return deg * (Math.PI/180);
+      };
+
+      var getDistance = function(coordinates){
+        var distInMeters = 0;
+        for (var i = 1; i < coordinates.length; i++){
+          var lat1 = coordinates[i-1][1];
+          var lon1 = coordinates[i-1][0];
+          var lat2 = coordinates[i][1];
+          var lon2 = coordinates[i][0];
+          var p1 = degToRad(lat1), p2 = degToRad(lat2), dl = degToRad(lon2-lon1), R = 6371e3; // gives d in metres
+          var d = Math.acos( Math.sin(p1)*Math.sin(p2) + Math.cos(p1)*Math.cos(p2) * Math.cos(dl) ) * R;
+          distInMeters += !d? 0 : d;
+        }
+        return distInMeters;
+      };
+
+      var randomInteger = function(min,max){
+        return Math.floor(Math.random() * (max-min+1))+min;
+      };
+
+      var randomColor = function(){
+        var hue = randomInteger(210,390)%360;
+        var sat = randomInteger(45,95);
+        var lum = randomInteger(40,60);
+        return 'hsl(' + hue + ',' + sat + '%,' + lum + '%)';
+      };
+
+      window.totalDistance = 0;
+
+      $.getJSON('hikes.json', function(data){
+        for (const hike of data){
+          var hue = Math.random()*360;// hue=240;
+          var sat = Math.random()*25 + 75;
+          var lum = Math.random()*50 + 25; lum=50;
+          hike.distance = getDistance(hike.features[0].geometry.coordinates);
+          if(hike.outAndBack) hike.distance*=2;
+          window.totalDistance+=hike.distance;
+          var derpLayer = L.geoJSON(hike, {color: randomColor()});
+          derpLayer.bindPopup(`<b>${hike.hikeName}</b><br/>${hike.hikeDate}<br/>${convertToPreferredUnit(hike.distance)}${hike.outAndBack?' (Out and Back)':''}`);
+          hikeRoutes.addLayer(derpLayer);
+        }
+      });
+    </script>
+  </body>
+</html>
