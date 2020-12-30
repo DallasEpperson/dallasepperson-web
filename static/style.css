@@ -1,5 +1,6 @@
 body {
-  padding: 50px;
+  padding: 0 1em;
+  margin-bottom: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -7,17 +8,17 @@ a {
   color: #00B7FF;
 }
 
-#mapid .leaflet-overlay-pane path {
+#map-container .leaflet-overlay-pane path {
   stroke-width: 5;
   stroke-opacity: 0.8;
 }
 
-#mapid .leaflet-overlay-pane path:hover {
+#map-container .leaflet-overlay-pane path:hover {
   stroke-width: 7;
   stroke-opacity: 1;
 }
 
-#mapid .leaflet-overlay-pane path:focus {
+#map-container .leaflet-overlay-pane path:focus {
   /*TODO: set class on path when its popup pane is triggered*/
   stroke-dasharray: 10,20;
   animation: linear infinite ant-path-anim;
