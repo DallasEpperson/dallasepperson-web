@@ -9,12 +9,12 @@ a {
 }
 
 #map-container .leaflet-overlay-pane path {
-  stroke-width: 5;
+  stroke-width: 8;
   stroke-opacity: 0.8;
 }
 
 #map-container .leaflet-overlay-pane path:hover {
-  stroke-width: 7;
+  stroke-width: 12;
   stroke-opacity: 1;
 }
 
