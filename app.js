@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), {maxAge: '30d'}));
+app.use('/static', express.static(path.join(__dirname, 'static'), {maxAge: '30d'}));
 
 app.use('/', indexRouter);
 app.use('/hikes', hikesRouter);
